@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music + Emotion - Synced 🎵</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe5ec 50%, #fff0f5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9d4a5a;
+        }
+
+        /* Music-reactive glow */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 182, 193, 0.1), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(255, 192, 203, 0.08), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+            animation: glow-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1.3;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Music tempo indicator */
+        .tempo-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 8px;
+            opacity: 0.3;
+        }
+
+        .tempo-bar {
+            width: 4px;
+            height: 20px;
+            background: #c84b5a;
+            border-radius: 2px;
+            animation: tempo-pulse 1.2s ease-in-out infinite;
+        }
+
+        .tempo-bar:nth-child(2) { animation-delay: 0.2s; }
+        .tempo-bar:nth-child(3) { animation-delay: 0.4s; }
+        .tempo-bar:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes tempo-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .opening-text {
+            font-family: 'Prata', serif;
+            font-size: clamp(28px, 8vw, 64px);
+            font-weight: 400;
+            color: #c84b5a;
+            line-height: 1.4;
+            letter-spacing: 1px;
+            animation: sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+        }
+
+        @keyframes sync-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-hearts {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            opacity: 0;
+            animation: sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+        }
+
+        .heart-small {
+            font-size: 32px;
+            animation: sync-float 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .heart-small:nth-child(2) { animation-delay: 0.4s; }
+        .heart-small:nth-child(3) { animation-delay: 0.8s; }
+
+        @keyframes sync-float {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-12px); }
+            50% { transform: translateY(-24px); }
+            75% { transform: translateY(-12px); }
+        }
+
+        .emotional-message {
+            font-size: clamp(24px, 6vw, 48px);
+            font-weight: 300;
+            color: #b8505f;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            max-width: 600px;
+            animation: sync-appear 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+        }
+
+        .heart-synced {
+            font-size: 70px;
+            margin: 40px 0;
+            animation: sync-heartbeat 1.8s ease-in-out infinite, sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+            opacity: 0;
+            filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.3));
+        }
+
+        @keyframes sync-heartbeat {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(200, 75, 90, 0.2));
+            }
+            20% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.4));
+            }
+            40% {
+                transform: scale(1.2);
+                filter: drop-shadow(0 0 25px rgba(200, 75, 90, 0.5));
+            }
+            60% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.4));
+            }
+        }
+
+        .hearts-display {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            font-size: clamp(50px, 12vw, 100px);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: sync-appear 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .heart-display {
+            animation: sync-heartbeat 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.3));
+        }
+
+        .heart-display:nth-child(2) { animation-delay: 0.25s; }
+        .heart-display:nth-child(3) { animation-delay: 0.5s; }
+
+        .valentine-title {
+            font-family: 'Prata', serif;
+            font-size: clamp(32px, 7vw, 56px);
+            color: #c84b5a;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+            letter-spacing: 2px;
+        }
+
+        .valentine-message {
+            font-size: clamp(16px, 5vw, 24px);
+            color: #b8505f;
+            line-height: 1.8;
+            margin: 20px 0;
+            max-width: 700px;
+            opacity: 0;
+            animation: sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn {
+            position: absolute;
+            bottom: 50px;
+            padding: 14px 40px;
+            border: 2px solid #c84b5a;
+            border-radius: 50px;
+            background: rgba(200, 75, 90, 0.08);
+            color: #c84b5a;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.6s ease;
+            font-family: 'Cormorant Garamond', serif;
+            opacity: 0;
+            animation: sync-appear 2.5s ease-out 2s forwards;
+        }
+
+        .nav-btn:hover {
+            background: rgba(200, 75, 90, 0.15);
+            box-shadow: 0 0 30px rgba(200, 75, 90, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .final-btn {
+            margin-top: 30px;
+            padding: 16px 50px;
+            font-size: 16px;
+            border: 2px solid #c84b5a;
+            background: rgba(200, 75, 90, 0.12);
+            color: #c84b5a;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.6s ease;
+            font-family: 'Cormorant Garamond', serif;
+            opacity: 0;
+            animation: sync-appear 2.5s ease-out 1.5s forwards;
+        }
+
+        .final-btn:hover {
+            background: rgba(200, 75, 90, 0.2);
+            box-shadow: 0 0 40px rgba(200, 75, 90, 0.45);
+            transform: translateY(-3px);
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: sync-sparkle 2.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sync-sparkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.8; }
+        }
+
+        .sparkle-1 { top: 15%; right: 10%; animation-delay: 0s; }
+        .sparkle-2 { top: 20%; left: 8%; animation-delay: 0.6s; }
+        .sparkle-3 { bottom: 20%; right: 5%; animation-delay: 1.2s; }
+        .sparkle-4 { bottom: 15%; left: 10%; animation-delay: 1.8s; }
+
+        @media(max-width: 480px) {
+            .screen { padding: 30px 20px; }
+            .nav-btn { bottom: 60px; padding: 12px 35px; font-size: 13px; }
+            .final-btn { padding: 14px 40px; font-size: 14px; margin-top: 25px; }
+            .floating-hearts { gap: 20px; margin-top: 30px; }
+            .heart-small { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="tempo-indicator">
+        <div class="tempo-bar"></div>
+        <div class="tempo-bar"></div>
+        <div class="tempo-bar"></div>
+        <div class="tempo-bar"></div>
+    </div>
+
+    <div class="container">
+        <!-- Screen 1 -->
+        <div class="screen active">
+            <div class="opening-text">
+                Hey… I have something<br>to tell you 🥺
+            </div>
+            <div class="floating-hearts">
+                <span class="heart-small">💕</span>
+                <span class="heart-small">💕</span>
+                <span class="heart-small">💕</span>
+            </div>
+            <button class="nav-btn" onclick="nextScreen()">Continue →</button>
+        </div>
+
+        <!-- Screen 2 -->
+        <div class="screen">
+            <div class="heart-synced">❤️</div>
+            <div class="emotional-message">
+                Every moment with you<br>feels special
+            </div>
+            <p style="font-size: clamp(14px, 4vw, 20px); color: #b8505f; margin-top: 30px; opacity: 0; animation: sync-appear 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards; font-weight: 300;">
+                You make my heart beat a little faster
+            </p>
+            <button class="nav-btn" onclick="nextScreen()">I feel it too →</button>
+        </div>
+
+        <!-- Screen 3 -->
+        <div class="screen">
+            <div class="hearts-display">
+                <span class="heart-display">💕</span>
+                <span class="heart-display">❤️</span>
+                <span class="heart-display">💕</span>
+            </div>
+            <div class="valentine-title">Be My Valentine?</div>
+            <div class="valentine-message">
+                I want to cherish every moment with you,<br>
+                To be the reason you smile,<br>
+                And to love you more with each passing day.
+            </div>
+            <button class="final-btn" onclick="celebrate()">Yes! 💕</button>
+            <button class="final-btn" onclick="celebrate()" style="margin-left: 10px;">Absolutely! 💕</button>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-2">✨</span>
+            <span class="sparkle sparkle-3">✨</span>
+            <span class="sparkle sparkle-4">✨</span>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 0;
+        const screens = document.querySelectorAll('.screen');
+        const bgMusic = document.getElementById('bgMusic');
+
+        function nextScreen() {
+            if (currentScreen < screens.length - 1) {
+                screens[currentScreen].classList.remove('active');
+                currentScreen++;
+                screens[currentScreen].classList.add('active');
+            }
+        }
+
+        function celebrate() {
+            bgMusic.volume = 0.35;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            const colors = ['❤️', '💕', '💖', '💗', '💓', '💞'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: 100%;
+                        font-size: ${20 + Math.random() * 30}px;
+                        z-index: 100;
+                        pointer-events: none;
+                        animation: float-up ${2 + Math.random() * 2}s ease-out forwards;
+                        filter: drop-shadow(0 0 8px rgba(200, 75, 90, 0.4));
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            bgMusic.volume = 0.12;
+            bgMusic.play().catch(() => {});
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-${100 + Math.random() * 200}vh) rotate(${Math.random() * 360}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextScreen();
+        });
+    </script>
+</body>
+</html>

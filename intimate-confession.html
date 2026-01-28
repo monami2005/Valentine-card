@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Personal Question 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #ffe5ec 0%, #fff5f7 50%, #ffe5ec 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b3a3a;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 182, 193, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(255, 192, 203, 0.1), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Screen 1 - Contemplation */
+        .thought-text {
+            font-family: 'Prata', serif;
+            font-size: clamp(24px, 6vw, 48px);
+            font-weight: 300;
+            color: #c84b5a;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            max-width: 600px;
+            animation: soft-appear 2.5s ease-out forwards;
+            opacity: 0;
+            font-style: italic;
+        }
+
+        @keyframes soft-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .breathing-heart {
+            font-size: 56px;
+            margin: 50px 0;
+            animation: breathing-beat 2s ease-in-out infinite, soft-appear 2.5s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+
+        @keyframes breathing-beat {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 8px rgba(200, 75, 90, 0.2));
+            }
+            50% {
+                transform: scale(1.18);
+                filter: drop-shadow(0 0 20px rgba(200, 75, 90, 0.5));
+            }
+        }
+
+        /* Screen 2 - The Question */
+        .question-container {
+            max-width: 700px;
+        }
+
+        .question-heart {
+            font-size: 70px;
+            margin-bottom: 40px;
+            animation: soft-appear 2s ease-out forwards, breathing-beat 2s ease-in-out infinite;
+            opacity: 0;
+            filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.3));
+        }
+
+        .the-question {
+            font-family: 'Prata', serif;
+            font-size: clamp(36px, 8vw, 60px);
+            font-weight: 300;
+            color: #c84b5a;
+            line-height: 1.6;
+            letter-spacing: 1.5px;
+            margin: 20px 0 50px 0;
+            animation: soft-appear 2.5s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        .reassurance-message {
+            font-size: clamp(16px, 4vw, 22px);
+            color: #b8505f;
+            line-height: 2;
+            letter-spacing: 0.5px;
+            margin: 40px 0;
+            max-width: 650px;
+            animation: soft-appear 2.5s ease-out 2.5s forwards;
+            opacity: 0;
+            font-weight: 300;
+        }
+
+        .response-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 50px;
+            opacity: 0;
+            animation: soft-appear 1.5s ease-out 4s forwards;
+        }
+
+        .response-btn {
+            padding: 16px 60px;
+            border: 2px solid #c84b5a;
+            border-radius: 50px;
+            background: rgba(200, 75, 90, 0.1);
+            color: #c84b5a;
+            font-size: clamp(15px, 4vw, 18px);
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.5s ease;
+            font-family: 'Cormorant Garamond', serif;
+            min-width: 280px;
+        }
+
+        .response-btn:hover {
+            background: rgba(200, 75, 90, 0.15);
+            box-shadow: 0 0 35px rgba(200, 75, 90, 0.35);
+            transform: translateY(-3px);
+            border-color: #c84b5a;
+        }
+
+        .response-btn.yes {
+            border-color: #c84b5a;
+            background: rgba(200, 75, 90, 0.12);
+            color: #c84b5a;
+        }
+
+        .response-btn.gentle {
+            border-color: #c0a0a0;
+            background: rgba(192, 160, 160, 0.08);
+            color: #a07070;
+        }
+
+        .response-btn.gentle:hover {
+            background: rgba(192, 160, 160, 0.15);
+            box-shadow: 0 0 30px rgba(192, 160, 160, 0.3);
+            border-color: #a07070;
+        }
+
+        /* Screen 3 - Response */
+        .response-title {
+            font-family: 'Prata', serif;
+            font-size: clamp(36px, 8vw, 56px);
+            color: #c84b5a;
+            margin-bottom: 30px;
+            animation: soft-appear 2s ease-out forwards;
+            opacity: 0;
+            letter-spacing: 1px;
+        }
+
+        .response-message {
+            font-size: clamp(18px, 5vw, 28px);
+            color: #b8505f;
+            line-height: 2;
+            max-width: 700px;
+            animation: soft-appear 2.5s ease-out 0.8s forwards;
+            opacity: 0;
+            font-weight: 300;
+        }
+
+        .closing-heart {
+            font-size: 100px;
+            margin-top: 40px;
+            animation: soft-appear 2s ease-out 1.5s forwards, breathing-beat 2s ease-in-out infinite;
+            opacity: 0;
+            animation-delay: 1.5s, 1.5s;
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: sparkle-twinkle 2.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle-twinkle {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .sparkle-1 {
+            top: 15%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .sparkle-2 {
+            top: 20%;
+            left: 8%;
+            animation-delay: 0.5s;
+        }
+
+        .sparkle-3 {
+            bottom: 20%;
+            right: 5%;
+            animation-delay: 1s;
+        }
+
+        .sparkle-4 {
+            bottom: 15%;
+            left: 10%;
+            animation-delay: 1.5s;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            padding: 10px 20px;
+            border: 1px solid #c84b5a;
+            border-radius: 50px;
+            background: transparent;
+            color: #c84b5a;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: soft-appear 1.5s ease-out 5s forwards;
+            letter-spacing: 0.5px;
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background: rgba(200, 75, 90, 0.1);
+            box-shadow: 0 0 20px rgba(200, 75, 90, 0.2);
+        }
+
+        @media(max-width: 600px) {
+            .screen {
+                padding: 40px 20px;
+            }
+
+            .response-buttons {
+                gap: 15px;
+            }
+
+            .response-btn {
+                padding: 14px 45px;
+                min-width: 240px;
+            }
+
+            .breathing-heart {
+                font-size: 48px;
+                margin: 35px 0;
+            }
+
+            .question-heart {
+                font-size: 60px;
+                margin-bottom: 30px;
+            }
+
+            .closing-heart {
+                font-size: 80px;
+                margin-top: 30px;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .screen {
+                padding: 30px 15px;
+            }
+
+            .thought-text {
+                font-size: clamp(20px, 5vw, 32px);
+            }
+
+            .the-question {
+                font-size: clamp(28px, 7vw, 44px);
+            }
+
+            .response-btn {
+                padding: 13px 40px;
+                font-size: 14px;
+                min-width: 220px;
+            }
+
+            .back-btn {
+                padding: 9px 18px;
+                font-size: 12px;
+                top: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Screen 1: Contemplation -->
+        <div class="screen active">
+            <div class="thought-text">
+                I've been trying to find<br>the right words…
+            </div>
+            <div class="breathing-heart">❤️</div>
+            <p style="font-size: clamp(14px, 4vw, 18px); color: #b8505f; margin-top: 30px; opacity: 0; animation: soft-appear 2.5s ease-out 1.5s forwards; font-weight: 300;">
+                But I think you deserve to know how I truly feel
+            </p>
+            <button class="response-btn yes" onclick="moveToQuestion()" style="opacity: 0; animation: soft-appear 1.5s ease-out 2.5s forwards; margin-top: 50px;">
+                I'm listening →
+            </button>
+        </div>
+
+        <!-- Screen 2: The Question -->
+        <div class="screen">
+            <div class="question-container">
+                <div class="question-heart">💕</div>
+                <div class="the-question">
+                    Will you be<br>my Valentine?
+                </div>
+
+                <div class="reassurance-message">
+                    No matter what you say,<br>
+                    I hope you know how much<br>
+                    you truly mean to me.
+                </div>
+
+                <div class="response-buttons">
+                    <button class="response-btn yes" onclick="showYesResponse()">
+                        Yes 💕
+                    </button>
+                    <button class="response-btn gentle" onclick="showGentleResponse()">
+                        Let's stay close
+                    </button>
+                </div>
+            </div>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-2">✨</span>
+            <span class="sparkle sparkle-3">✨</span>
+            <span class="sparkle sparkle-4">✨</span>
+        </div>
+
+        <!-- Screen 3: Response -->
+        <div class="screen">
+            <div class="response-title" id="responseTitle">
+                You've made me so happy
+            </div>
+            <div class="response-message" id="responseMessage">
+                I promise to cherish every moment with you,<br>
+                to be there for you,<br>
+                and to love you with all my heart.
+            </div>
+            <div class="closing-heart">❤️</div>
+            <button class="back-btn" onclick="location.reload()">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const screens = document.querySelectorAll('.screen');
+        let currentScreen = 0;
+
+        function showScreen(index) {
+            screens[currentScreen].classList.remove('active');
+            currentScreen = index;
+            screens[currentScreen].classList.add('active');
+        }
+
+        function moveToQuestion() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.12;
+            bgMusic.play().catch(() => {});
+            showScreen(1);
+        }
+
+        function showYesResponse() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.35;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            document.getElementById('responseTitle').textContent = 'You\'ve made me so happy';
+            document.getElementById('responseMessage').innerHTML = 
+                'I promise to cherish every moment with you,<br>' +
+                'to be there for you,<br>' +
+                'and to love you with all my heart.';
+
+            // Celebration animation
+            celebrateWithHearts();
+            showScreen(2);
+        }
+
+        function showGentleResponse() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.2;
+            bgMusic.play();
+
+            document.getElementById('responseTitle').textContent = 'Thank you for being honest';
+            document.getElementById('responseMessage').innerHTML = 
+                'Your friendship means the world to me.<br>' +
+                'I hope we can continue to share<br>' +
+                'the wonderful moments we have together.';
+
+            showScreen(2);
+        }
+
+        function celebrateWithHearts() {
+            const colors = ['❤️', '💕', '💖', '💗', '💓', '💞'];
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: 100%;
+                        font-size: ${20 + Math.random() * 30}px;
+                        z-index: 100;
+                        pointer-events: none;
+                        animation: float-up ${2 + Math.random() * 2}s ease-out forwards;
+                        filter: drop-shadow(0 0 8px rgba(200, 75, 90, 0.4));
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.12;
+            bgMusic.play().catch(() => {});
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-${100 + Math.random() * 200}vh) rotate(${Math.random() * 360}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

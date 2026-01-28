@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Someone Wants to Ask You Something 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #ffe5ec 0%, #fff5f7 50%, #ffe5ec 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b3a3a;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 182, 193, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(255, 192, 203, 0.1), transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Screen 1: Opening */
+        .opening-line {
+            font-size: clamp(22px, 5vw, 40px);
+            font-weight: 300;
+            color: #b8505f;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            max-width: 650px;
+            animation: gentle-fade-in 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes gentle-fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pause-heart {
+            font-size: 52px;
+            margin: 60px 0;
+            animation: calm-pulse 2.5s ease-in-out infinite, gentle-fade-in 2s ease-out 1.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes calm-pulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(200, 75, 90, 0.15));
+            }
+            50% {
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 15px rgba(200, 75, 90, 0.35));
+            }
+        }
+
+        /* Screen 2: The Question */
+        .question-wrapper {
+            max-width: 700px;
+        }
+
+        .message-header {
+            font-size: 14px;
+            color: #c0a0a0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            animation: gentle-fade-in 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .the-question {
+            font-family: 'Prata', serif;
+            font-size: clamp(40px, 9vw, 64px);
+            font-weight: 300;
+            color: #c84b5a;
+            line-height: 1.5;
+            letter-spacing: 1px;
+            margin: 20px 0 40px 0;
+            animation: message-type 4s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes message-type {
+            0% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .silence-moment {
+            width: 60px;
+            height: 3px;
+            background: rgba(200, 75, 90, 0.2);
+            margin: 50px auto;
+            animation: gentle-fade-in 1.5s ease-out 4.5s forwards;
+            opacity: 0;
+            border-radius: 2px;
+        }
+
+        .reassurance {
+            font-size: clamp(16px, 4vw, 22px);
+            color: #b8505f;
+            line-height: 2;
+            letter-spacing: 0.5px;
+            margin: 40px 0 60px 0;
+            max-width: 650px;
+            animation: gentle-fade-in 2s ease-out 5.5s forwards;
+            opacity: 0;
+            font-weight: 300;
+        }
+
+        .response-area {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            animation: gentle-fade-in 1.5s ease-out 7s forwards;
+            opacity: 0;
+        }
+
+        .response-btn {
+            padding: 15px 55px;
+            border: 1.5px solid #c84b5a;
+            border-radius: 50px;
+            background: rgba(200, 75, 90, 0.08);
+            color: #c84b5a;
+            font-size: clamp(15px, 4vw, 18px);
+            font-weight: 400;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.6s ease;
+            font-family: 'Cormorant Garamond', serif;
+            min-width: 280px;
+        }
+
+        .response-btn:hover {
+            background: rgba(200, 75, 90, 0.14);
+            box-shadow: 0 0 40px rgba(200, 75, 90, 0.3);
+            transform: translateY(-2px);
+            border-color: #c84b5a;
+        }
+
+        .response-btn.gentle {
+            border-color: #d4a5a5;
+            background: rgba(212, 165, 165, 0.08);
+            color: #a07070;
+        }
+
+        .response-btn.gentle:hover {
+            background: rgba(212, 165, 165, 0.14);
+            box-shadow: 0 0 35px rgba(212, 165, 165, 0.28);
+            border-color: #a07070;
+        }
+
+        /* Screen 3: Response */
+        .response-title {
+            font-family: 'Prata', serif;
+            font-size: clamp(40px, 9vw, 56px);
+            color: #c84b5a;
+            margin-bottom: 30px;
+            animation: gentle-fade-in 2s ease-out forwards;
+            opacity: 0;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        .response-message {
+            font-size: clamp(18px, 5vw, 24px);
+            color: #b8505f;
+            line-height: 2;
+            max-width: 680px;
+            animation: gentle-fade-in 2.5s ease-out 0.8s forwards;
+            opacity: 0;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .response-heart {
+            font-size: 90px;
+            margin: 50px 0 0 0;
+            animation: gentle-fade-in 2s ease-out 1.6s forwards, calm-pulse 2.5s ease-in-out infinite;
+            opacity: 0;
+            filter: drop-shadow(0 0 12px rgba(200, 75, 90, 0.3));
+        }
+
+        .restart-btn {
+            position: absolute;
+            bottom: 40px;
+            padding: 11px 25px;
+            border: 1px solid #c0a0a0;
+            border-radius: 50px;
+            background: transparent;
+            color: #a07070;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            transition: all 0.4s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: gentle-fade-in 1.5s ease-out 2.5s forwards;
+            z-index: 20;
+        }
+
+        .restart-btn:hover {
+            background: rgba(192, 160, 160, 0.1);
+            box-shadow: 0 0 20px rgba(192, 160, 160, 0.2);
+            border-color: #a07070;
+        }
+
+        /* Soft sparkles */
+        .sparkle {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0;
+            animation: soft-twinkle 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes soft-twinkle {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .sparkle-1 {
+            top: 10%;
+            right: 12%;
+            animation-delay: 0s;
+        }
+
+        .sparkle-2 {
+            top: 22%;
+            left: 10%;
+            animation-delay: 0.8s;
+        }
+
+        .sparkle-3 {
+            bottom: 22%;
+            right: 8%;
+            animation-delay: 1.6s;
+        }
+
+        .sparkle-4 {
+            bottom: 10%;
+            left: 12%;
+            animation-delay: 2.4s;
+        }
+
+        @media(max-width: 600px) {
+            .screen {
+                padding: 40px 20px;
+            }
+
+            .opening-line {
+                font-size: clamp(20px, 5vw, 32px);
+            }
+
+            .the-question {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+
+            .response-area {
+                gap: 15px;
+            }
+
+            .response-btn {
+                padding: 13px 45px;
+                min-width: 240px;
+                font-size: 14px;
+            }
+
+            .pause-heart {
+                font-size: 44px;
+                margin: 40px 0;
+            }
+
+            .response-heart {
+                font-size: 70px;
+                margin: 40px 0 0 0;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .screen {
+                padding: 30px 15px;
+            }
+
+            .opening-line {
+                font-size: clamp(18px, 5vw, 28px);
+            }
+
+            .the-question {
+                font-size: clamp(28px, 7vw, 40px);
+            }
+
+            .response-btn {
+                padding: 12px 40px;
+                min-width: 220px;
+                font-size: 13px;
+            }
+
+            .restart-btn {
+                padding: 10px 20px;
+                font-size: 11px;
+                bottom: 30px;
+            }
+
+            .sparkle {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Screen 1: The Opening -->
+        <div class="screen active">
+            <div class="opening-line">
+                Someone has something<br>they've been wanting<br>to ask you…
+            </div>
+            <div class="pause-heart">❤️</div>
+            <button class="response-btn" onclick="moveToQuestion()" style="opacity: 0; animation: gentle-fade-in 1.5s ease-out 3.5s forwards; margin-top: 50px;">
+                I'm ready →
+            </button>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-2">✨</span>
+        </div>
+
+        <!-- Screen 2: The Question -->
+        <div class="screen">
+            <div class="question-wrapper">
+                <div class="message-header">A message for you</div>
+
+                <div class="the-question">
+                    Will you be<br>my Valentine?
+                </div>
+
+                <div class="silence-moment"></div>
+
+                <div class="reassurance">
+                    Take your time.<br>
+                    No matter your answer,<br>
+                    you're appreciated.
+                </div>
+
+                <div class="response-area">
+                    <button class="response-btn" onclick="showYesResponse()">
+                        Yes, I will 💕
+                    </button>
+                    <button class="response-btn gentle" onclick="showGentleResponse()">
+                        I need to think about it
+                    </button>
+                </div>
+            </div>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-2">✨</span>
+            <span class="sparkle sparkle-3">✨</span>
+            <span class="sparkle sparkle-4">✨</span>
+        </div>
+
+        <!-- Screen 3: The Response -->
+        <div class="screen">
+            <div class="response-title" id="responseTitle">
+                You've made me happy
+            </div>
+            <div class="response-message" id="responseMessage">
+                I promise to cherish you,<br>
+                to be there when you need me,<br>
+                and to love you truly.
+            </div>
+            <div class="response-heart">❤️</div>
+            <button class="restart-btn" onclick="location.reload()">Start Over</button>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-3">✨</span>
+        </div>
+    </div>
+
+    <script>
+        const screens = document.querySelectorAll('.screen');
+        let currentScreen = 0;
+
+        function showScreen(index) {
+            screens[currentScreen].classList.remove('active');
+            currentScreen = index;
+            screens[currentScreen].classList.add('active');
+        }
+
+        function moveToQuestion() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.12;
+            bgMusic.play().catch(() => {});
+            showScreen(1);
+        }
+
+        function showYesResponse() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.35;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            document.getElementById('responseTitle').textContent = 'You\'ve made me so happy';
+            document.getElementById('responseMessage').innerHTML = 
+                'I promise to cherish you,<br>' +
+                'to be there when you need me,<br>' +
+                'and to love you truly.';
+
+            celebrateWithHearts();
+            showScreen(2);
+        }
+
+        function showGentleResponse() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.2;
+            bgMusic.play();
+
+            document.getElementById('responseTitle').textContent = 'Thank you for being honest';
+            document.getElementById('responseMessage').innerHTML = 
+                'Your honesty means everything to me.<br>' +
+                'I\'m grateful for your thoughtfulness,<br>' +
+                'and whatever you decide, I\'ll respect it.';
+
+            showScreen(2);
+        }
+
+        function celebrateWithHearts() {
+            const colors = ['❤️', '💕', '💖', '💗', '💓', '💞'];
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: 100%;
+                        font-size: ${18 + Math.random() * 28}px;
+                        z-index: 100;
+                        pointer-events: none;
+                        animation: float-up ${2 + Math.random() * 2}s ease-out forwards;
+                        filter: drop-shadow(0 0 8px rgba(200, 75, 90, 0.3));
+                        opacity: 0.8;
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 60);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.1;
+            bgMusic.play().catch(() => {});
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% { 
+                    transform: translateY(0) rotate(0deg); 
+                    opacity: 0.8; 
+                }
+                100% { 
+                    transform: translateY(-${100 + Math.random() * 250}vh) rotate(${Math.random() * 360}deg); 
+                    opacity: 0; 
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Allow escape to restart
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

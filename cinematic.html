@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Quiet Confession - Cinematic 🎬</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e8d4d0;
+        }
+
+        /* Cinematic dark glow */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(139, 69, 69, 0.25), transparent 60%),
+                        radial-gradient(circle at 70% 60%, rgba(205, 92, 92, 0.1), transparent 60%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .opening-text {
+            font-family: 'Prata', serif;
+            font-size: clamp(28px, 8vw, 56px);
+            font-weight: 300;
+            color: #f5e6e0;
+            line-height: 1.6;
+            letter-spacing: 2px;
+            animation: cinematic-appear 3s ease-out forwards;
+            opacity: 0;
+            text-shadow: 0 0 30px rgba(205, 92, 92, 0.3);
+        }
+
+        @keyframes cinematic-appear {
+            0% {
+                opacity: 0;
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .emotional-message {
+            font-size: clamp(24px, 6vw, 48px);
+            font-weight: 300;
+            color: #f5e6e0;
+            line-height: 1.8;
+            letter-spacing: 1.5px;
+            max-width: 600px;
+            animation: cinematic-appear 3.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .heart-pulsing {
+            font-size: 80px;
+            margin: 50px 0;
+            animation: cinema-heartbeat 2s ease-in-out infinite, cinematic-appear 3s ease-out 0.5s forwards;
+            opacity: 0;
+            filter: drop-shadow(0 0 20px rgba(205, 92, 92, 0.4));
+        }
+
+        @keyframes cinema-heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .hearts-display {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: clamp(60px, 12vw, 100px);
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: cinematic-appear 3s ease-out forwards;
+        }
+
+        .heart-display {
+            animation: cinema-heartbeat 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(205, 92, 92, 0.4));
+        }
+
+        .heart-display:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .heart-display:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .valentine-title {
+            font-family: 'Prata', serif;
+            font-size: clamp(32px, 7vw, 56px);
+            color: #f5e6e0;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: cinematic-appear 3.5s ease-out 0.5s forwards;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px rgba(205, 92, 92, 0.3);
+        }
+
+        .valentine-message {
+            font-size: clamp(16px, 5vw, 24px);
+            color: #e8d4d0;
+            line-height: 2;
+            margin: 30px 0;
+            max-width: 700px;
+            opacity: 0;
+            animation: cinematic-appear 3.5s ease-out 1s forwards;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn {
+            position: absolute;
+            bottom: 50px;
+            padding: 15px 45px;
+            border: 1px solid #8b5a5a;
+            border-radius: 50px;
+            background: rgba(139, 69, 69, 0.1);
+            color: #e8d4d0;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 1s ease;
+            font-family: 'Cormorant Garamond', serif;
+            opacity: 0;
+            animation: fade-in 2s ease-out 2.5s forwards;
+            backdrop-filter: blur(5px);
+            text-transform: uppercase;
+        }
+
+        .nav-btn:hover {
+            background: rgba(205, 92, 92, 0.2);
+            box-shadow: 0 0 40px rgba(205, 92, 92, 0.4);
+            border-color: #cd5c5c;
+            transform: translateY(-2px);
+        }
+
+        .final-btn {
+            margin-top: 40px;
+            padding: 16px 50px;
+            font-size: 14px;
+            border: 1px solid #8b5a5a;
+            background: rgba(139, 69, 69, 0.12);
+            color: #e8d4d0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 400;
+            letter-spacing: 2px;
+            transition: all 1s ease;
+            font-family: 'Cormorant Garamond', serif;
+            opacity: 0;
+            animation: fade-in 2s ease-out 3s forwards;
+            text-transform: uppercase;
+        }
+
+        .final-btn:hover {
+            background: rgba(205, 92, 92, 0.2);
+            box-shadow: 0 0 50px rgba(205, 92, 92, 0.5);
+            border-color: #cd5c5c;
+            transform: translateY(-3px);
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0;
+            animation: cinema-sparkle 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cinema-sparkle {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .sparkle-1 { top: 15%; right: 10%; animation-delay: 0s; }
+        .sparkle-2 { top: 25%; left: 8%; animation-delay: 0.8s; }
+        .sparkle-3 { bottom: 20%; right: 5%; animation-delay: 1.6s; }
+        .sparkle-4 { bottom: 15%; left: 12%; animation-delay: 2.4s; }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media(max-width: 480px) {
+            .screen { padding: 40px 20px; }
+            .nav-btn { bottom: 35px; padding: 13px 35px; font-size: 12px; }
+            .final-btn { padding: 14px 40px; font-size: 12px; margin-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Screen 1 -->
+        <div class="screen active">
+            <div class="opening-text">
+                Hey…<br>I have something<br>to tell you 🥺
+            </div>
+            <button class="nav-btn" onclick="nextScreen()" style="opacity: 1; animation: fade-in 2s ease-out 2.5s forwards;">Continue</button>
+        </div>
+
+        <!-- Screen 2 -->
+        <div class="screen">
+            <div class="heart-pulsing">❤️</div>
+            <div class="emotional-message">
+                Every moment<br>with you<br>feels special
+            </div>
+            <p style="font-size: clamp(14px, 4vw, 18px); color: #e8d4d0; margin-top: 40px; opacity: 0; animation: cinematic-appear 3s ease-out 1s forwards; font-weight: 300;">
+                You make my heart beat a little faster
+            </p>
+            <button class="nav-btn" onclick="nextScreen()" style="opacity: 1; animation: fade-in 2s ease-out 2.5s forwards;">Continue</button>
+        </div>
+
+        <!-- Screen 3 -->
+        <div class="screen">
+            <div class="hearts-display">
+                <span class="heart-display">❤️</span>
+                <span class="heart-display">💕</span>
+                <span class="heart-display">❤️</span>
+            </div>
+            <div class="valentine-title">Be My Valentine?</div>
+            <div class="valentine-message">
+                I want to cherish every moment with you,<br>
+                To be the reason you smile,<br>
+                And to love you more with each passing day.
+            </div>
+            <button class="final-btn" onclick="celebrate()">Yes 💕</button>
+            <button class="final-btn" onclick="celebrate()" style="margin-left: 15px;">Absolutely 💕</button>
+
+            <span class="sparkle sparkle-1">✨</span>
+            <span class="sparkle sparkle-2">✨</span>
+            <span class="sparkle sparkle-3">✨</span>
+            <span class="sparkle sparkle-4">✨</span>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 0;
+        const screens = document.querySelectorAll('.screen');
+
+        function nextScreen() {
+            if (currentScreen < screens.length - 1) {
+                screens[currentScreen].classList.remove('active');
+                currentScreen++;
+                screens[currentScreen].classList.add('active');
+            }
+        }
+
+        function celebrate() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.3;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            const colors = ['❤️', '💕', '💖', '💗', '💓', '💞'];
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: 100%;
+                        font-size: ${20 + Math.random() * 30}px;
+                        z-index: 100;
+                        pointer-events: none;
+                        animation: float-up ${2 + Math.random() * 2}s ease-out forwards;
+                        filter: drop-shadow(0 0 10px rgba(205, 92, 92, 0.5));
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.1;
+            bgMusic.play().catch(() => {});
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-${100 + Math.random() * 300}vh) rotate(${Math.random() * 360}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextScreen();
+        });
+    </script>
+</body>
+</html>

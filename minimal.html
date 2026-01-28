@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Quiet Moment - Minimal 🤍</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .opening-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 6vw, 52px);
+            font-weight: 400;
+            color: #333;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
+            animation: minimal-appear 2.5s ease-out forwards;
+            opacity: 0;
+            max-width: 500px;
+            font-style: italic;
+        }
+
+        @keyframes minimal-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emotional-message {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 6vw, 48px);
+            font-weight: 400;
+            color: #333;
+            line-height: 2;
+            letter-spacing: 0.5px;
+            max-width: 550px;
+            animation: minimal-appear 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .heart-minimal {
+            font-size: 48px;
+            margin: 50px 0;
+            animation: minimal-pulse 2.5s ease-in-out infinite, minimal-appear 2s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes minimal-pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .hearts-minimal {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 56px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: minimal-appear 2.5s ease-out forwards;
+        }
+
+        .heart-display {
+            animation: minimal-pulse 2.5s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .heart-display:nth-child(2) { animation-delay: 0.2s; }
+        .heart-display:nth-child(3) { animation-delay: 0.4s; }
+
+        .valentine-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 8vw, 56px);
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: minimal-appear 2.5s ease-out 0.3s forwards;
+            letter-spacing: 1px;
+        }
+
+        .valentine-message {
+            font-family: 'Lato', sans-serif;
+            font-size: clamp(16px, 4vw, 20px);
+            color: #555;
+            line-height: 2;
+            margin: 30px 0;
+            max-width: 600px;
+            opacity: 0;
+            animation: minimal-appear 2.5s ease-out 0.6s forwards;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+            font-style: italic;
+        }
+
+        .subtitle-text {
+            font-size: 14px;
+            color: #999;
+            margin-top: 30px;
+            opacity: 0;
+            animation: minimal-appear 2.5s ease-out 1s forwards;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .nav-btn {
+            position: absolute;
+            bottom: 50px;
+            padding: 12px 40px;
+            border: 1px solid #999;
+            border-radius: 50px;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+            font-weight: 300;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.8s ease;
+            font-family: 'Lato', sans-serif;
+            opacity: 0;
+            animation: minimal-appear 2s ease-out 1.8s forwards;
+            text-transform: uppercase;
+        }
+
+        .nav-btn:hover {
+            border-color: #333;
+            background: rgba(51, 51, 51, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .final-btn {
+            margin-top: 25px;
+            padding: 13px 45px;
+            font-size: 13px;
+            border: 1px solid #999;
+            background: transparent;
+            color: #333;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 300;
+            letter-spacing: 2px;
+            transition: all 0.8s ease;
+            font-family: 'Lato', sans-serif;
+            opacity: 0;
+            animation: minimal-appear 2s ease-out 1.2s forwards;
+            text-transform: uppercase;
+        }
+
+        .final-btn:hover {
+            border-color: #333;
+            background: rgba(51, 51, 51, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 50%;
+            opacity: 0;
+            animation: dot-fade 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes dot-fade {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.3; }
+        }
+
+        .dot-1 { top: 10%; right: 8%; animation-delay: 0s; }
+        .dot-2 { top: 20%; left: 10%; animation-delay: 0.8s; }
+        .dot-3 { bottom: 18%; right: 12%; animation-delay: 1.6s; }
+
+        @media(max-width: 480px) {
+            .screen { padding: 40px 20px; }
+            .nav-btn { bottom: 40px; padding: 11px 35px; font-size: 12px; }
+            .final-btn { padding: 11px 35px; font-size: 12px; margin-top: 18px; }
+            .hearts-minimal { gap: 30px; font-size: 48px; margin-bottom: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Screen 1 -->
+        <div class="screen active">
+            <div class="opening-text">
+                Hey…<br>I have something<br>to tell you
+            </div>
+            <p class="subtitle-text" style="opacity: 1; animation: minimal-appear 2.5s ease-out 0.8s forwards; margin-top: 50px;">🥺</p>
+            <button class="nav-btn" onclick="nextScreen()">Next</button>
+            <span class="dot dot-1"></span>
+            <span class="dot dot-2"></span>
+        </div>
+
+        <!-- Screen 2 -->
+        <div class="screen">
+            <div class="heart-minimal">❤️</div>
+            <div class="emotional-message">
+                Every moment<br>with you<br>feels special
+            </div>
+            <p class="subtitle-text">You make my heart beat a little faster</p>
+            <button class="nav-btn" onclick="nextScreen()">Next</button>
+            <span class="dot dot-1"></span>
+            <span class="dot dot-3"></span>
+        </div>
+
+        <!-- Screen 3 -->
+        <div class="screen">
+            <div class="hearts-minimal">
+                <span class="heart-display">❤️</span>
+                <span class="heart-display">❤️</span>
+                <span class="heart-display">❤️</span>
+            </div>
+            <div class="valentine-title">Be My Valentine?</div>
+            <div class="valentine-message">
+                I want to cherish every moment with you,<br>
+                To be the reason you smile,<br>
+                And to love you more with each passing day.
+            </div>
+            <button class="final-btn" onclick="celebrate()">Yes</button>
+            <button class="final-btn" onclick="celebrate()" style="margin-left: 15px;">Absolutely</button>
+
+            <span class="dot dot-1"></span>
+            <span class="dot dot-2"></span>
+            <span class="dot dot-3"></span>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 0;
+        const screens = document.querySelectorAll('.screen');
+
+        function nextScreen() {
+            if (currentScreen < screens.length - 1) {
+                screens[currentScreen].classList.remove('active');
+                currentScreen++;
+                screens[currentScreen].classList.add('active');
+            }
+        }
+
+        function celebrate() {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.3;
+            bgMusic.currentTime = 0;
+            bgMusic.play();
+
+            const colors = ['❤️', '💕', '💖'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: 100%;
+                        font-size: ${18 + Math.random() * 25}px;
+                        z-index: 100;
+                        pointer-events: none;
+                        opacity: 0.7;
+                        animation: float-up ${2.5 + Math.random() * 1.5}s ease-out forwards;
+                    `;
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 60);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            bgMusic.volume = 0.08;
+            bgMusic.play().catch(() => {});
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% { transform: translateY(0); opacity: 0.7; }
+                100% { transform: translateY(-${80 + Math.random() * 200}vh) rotate(${Math.random() * 180}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextScreen();
+        });
+    </script>
+</body>
+</html>
